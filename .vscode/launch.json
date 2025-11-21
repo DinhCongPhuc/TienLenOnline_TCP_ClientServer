@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "GameViewTestApp",
+            "request": "launch",
+            "mainClass": "client.view.GameViewTestApp",
+            "projectName": "TienLenOnline_831cd8ec"
+        },
+        {
+            "type": "java",
+            "name": "TestDB",
+            "request": "launch",
+            "mainClass": "server.TestDB",
+            "projectName": "TienLenOnline_831cd8ec"
+        },
+        {
+            "type": "java",
+            "name": "MainServer",
+            "request": "launch",
+            "mainClass": "server.MainServer",
+            "projectName": "TienLenOnline_831cd8ec"
+        },
+        {
+            "type": "java",
+            "name": "MainApp",
+            "request": "launch",
+            "mainClass": "client.MainApp",
+            "projectName": "TienLenOnline_831cd8ec",
+            "vmArgs": "--module-path \"${workspaceFolder}/lib/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+        {
+            "type": "java",
+            "name": "TienLenServer",
+            "request": "launch",
+            "mainClass": "server.TienLenServer",
+            "projectName": "TienLenOnline_831cd8ec",
+            "vmArgs": "--module-path \"${workspaceFolder}/lib/javafx-sdk-21.0.7/lib\" --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}
