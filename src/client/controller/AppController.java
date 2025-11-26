@@ -14,6 +14,7 @@ public class AppController {
     private Stage stage;
     private NetworkClient client;
     private Gson gson = new Gson();
+    private AppController app;
 
     public AppController(Stage stage, NetworkClient client) {
         this.stage = stage;
@@ -37,21 +38,27 @@ public class AppController {
     }
 
     public void showGame() {
-        Platform.runLater(() -> {
-            // Tạo controller và view với payload mặc định null
-            GameController gc = new GameController(client, this, null);
-            GameView gv = new GameView(gc, null);
+    Platform.runLater(() -> {
+        // 1. Tạo Controller với payload mặc định null (hoặc payload thực tế nếu có)
+        GameController gameController = new GameController(client, app, null);
 
-            // Liên kết controller với view
-            gc.setView(gv); // ⚠️ quan trọng, nếu thiếu sẽ lỗi view null
+        // 2. Tạo GameView và truyền Controller
+        GameView gameView = new GameView(gameController);
 
-            // Chuyển scene sang GameView
-            Scene gameScene = new Scene(gv.getRoot(), 800, 600);
-            stage.setScene(gameScene);
-            stage.setTitle("Game - Phòng mới");
-            stage.show();
-        });
-    }
+        // 3. Gán view vào Controller
+        gameController.setView(gameView);
+
+        // 4. Tạo Scene và thêm stylesheet
+        Scene scene = new Scene(gameView.getRoot(), 1100, 700);
+        scene.getStylesheets().add(getClass().getResource("/main/resources/styles/game.css").toExternalForm());
+
+        // 5. Set Scene cho Stage và hiển thị
+        stage.setScene(scene);
+        stage.setTitle("Game - Phòng mới");
+        stage.show();
+    });
+}
+
 
 
 
