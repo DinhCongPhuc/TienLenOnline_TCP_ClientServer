@@ -2,6 +2,7 @@ package server.controller;
 
 import com.google.gson.*;
 
+import server.database.RoomDAO;
 import server.database.UserDAO;
 import server.model.*;
 import server.view.ServerView;
@@ -10,8 +11,7 @@ import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import server.database.RoomDAO;;
+import java.util.concurrent.ConcurrentHashMap;;
 
 
 public class ServerController {

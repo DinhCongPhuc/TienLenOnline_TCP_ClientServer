@@ -1,12 +1,13 @@
 package client.view;
 
-import client.controller.AppController;
-import client.controller.RoomController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import client.controller.AppController;
+import client.controller.RoomController;
+
 import java.util.UUID;
 
 public class RoomView {

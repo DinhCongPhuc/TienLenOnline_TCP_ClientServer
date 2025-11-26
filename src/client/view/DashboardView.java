@@ -1,6 +1,5 @@
 package client.view;
 
-import client.controller.AppController;
 import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import client.controller.AppController;
 
 
 
@@ -47,7 +47,7 @@ public class DashboardView extends BorderPane {
         sidebar.setStyle("-fx-background-color: #ffffffaa; -fx-backdrop-filter: blur(10px);");
 
         // Avatar
-        ImageView avatar = new ImageView(new Image(getClass().getResource("/client/assets/avatar.jpg").toString()));
+        ImageView avatar = new ImageView(new Image(getClass().getResource("/main/resources/assets/avatar.jpg").toString()));
         avatar.setFitWidth(90);
         avatar.setFitHeight(90);
 

@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainApp",
+            "request": "launch",
+            "mainClass": "main.resources.client.MainApp",
+            "projectName": "TienLenOnline_831cd8ec"
+        },
+        {
+            "type": "java",
+            "name": "MainServer",
+            "request": "launch",
+            "mainClass": "main.resources.server.MainServer",
+            "projectName": "TienLenOnline_831cd8ec"
+        },
+        {
+            "type": "java",
             "name": "GameViewTestApp",
             "request": "launch",
             "mainClass": "client.view.GameViewTestApp",

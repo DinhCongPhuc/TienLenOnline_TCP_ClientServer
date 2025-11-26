@@ -1,10 +1,10 @@
 package client.view;
 
-import client.controller.AppController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import client.controller.AppController;
 
 public class LoginView {
 

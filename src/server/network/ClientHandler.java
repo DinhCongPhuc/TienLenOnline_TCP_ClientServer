@@ -1,10 +1,10 @@
 package server.network;
 
-import server.controller.ServerController;
-import server.model.Player;
-
 import java.io.*;
 import java.net.Socket;
+
+import server.controller.ServerController;
+import server.model.Player;
 
 public class ClientHandler implements Runnable {
     private Socket socket;

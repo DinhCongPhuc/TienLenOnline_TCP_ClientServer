@@ -1,8 +1,8 @@
 package client.view;
 
-import client.controller.GameController;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import client.controller.GameController;
 
 import java.io.InputStream;
 import java.util.*;
@@ -88,10 +89,10 @@ public class GameView {
         table.setStyle("-fx-background-color: linear-gradient(to bottom, #0E7A45, #0A6A3A);");
 
         // TOP / LEFT / RIGHT / BOTTOM player boxes
-        topBox = createPlayerBox("PlayerTop", "/client/assets/avatar.jpg");
-        leftBox = createPlayerBox("PlayerLeft", "/client/assets/avatar.jpg");
-        rightBox = createPlayerBox("PlayerRight", "/client/assets/avatar.jpg");
-        bottomBox = createPlayerBox("Bạn", "/client/assets/avatar.jpg");
+        topBox = createPlayerBox("PlayerTop", "/main/resources/assets/avatar.jpg");
+        leftBox = createPlayerBox("PlayerLeft", "/main/resources/assets/avatar.jpg");
+        rightBox = createPlayerBox("PlayerRight", "/main/resources/assets/avatar.jpg");
+        bottomBox = createPlayerBox("Bạn", "/main/resources/assets/avatar.jpg");
 
         BorderPane.setAlignment(topBox, Pos.TOP_CENTER);
         BorderPane.setAlignment(leftBox, Pos.CENTER_LEFT);
@@ -301,7 +302,8 @@ public class GameView {
     }
 
     private ImageView createCardImageView(String code) {
-        Image img = loadImage("/client/assets/card/" + code + ".png");
+        Image img = loadImage("/assets/card/" + code + ".png");
+        System.out.println(getClass().getResource("/assets/card/3C.png"));
         ImageView iv = new ImageView(img);
         iv.setFitWidth(72);
         iv.setFitHeight(104);
@@ -399,7 +401,8 @@ public class GameView {
                 if (arr.size() > 0) {
                     for (int i=0;i<arr.size();i++) {
                         String code = arr.get(i).getAsString();
-                        ImageView iv = new ImageView(loadImage("/client/assets/card/" + code + ".png"));
+                        ImageView iv = new ImageView(loadImage("/assets/card/" + code + ".png"));
+                        System.out.println(getClass().getResource("/assets/card/3C.png"));
                         iv.setFitWidth(52); iv.setFitHeight(76); iv.setPreserveRatio(true);
                         lastPlayImages.getChildren().add(iv);
                     }

@@ -1,10 +1,11 @@
 package client.controller;
 
-import client.network.NetworkClient;
-import client.view.GameView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import javafx.application.Platform;
+import client.network.NetworkClient;
+import client.view.GameView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ public class GameController {
     private GameView view;
     private String myPosition = "p1"; // mặc định nếu payload null
     private List<String> playerNames = new ArrayList<>();
+    private List<String> initialCards = new ArrayList<>();
+
 
     // Constructor cho phép payload null
     public GameController(NetworkClient client, AppController app, JsonObject payload) {
@@ -29,6 +32,12 @@ public class GameController {
                 JsonArray arr = payload.get("playerNames").getAsJsonArray();
                 for (int i = 0; i < arr.size(); i++) playerNames.add(arr.get(i).getAsString());
             }
+            if (payload.has("yourCards")) {
+                JsonArray arr = payload.get("yourCards").getAsJsonArray();
+                for (int i = 0; i < arr.size(); i++) {
+                    initialCards.add(arr.get(i).getAsString());
+                }
+            }
         }
 
         client.addHandler("GAME_STATE", this::handleGameState);
@@ -40,6 +49,9 @@ public class GameController {
         this.view = view;
         if (!playerNames.isEmpty()) {
             Platform.runLater(() -> view.setPlayerNames(playerNames, myPosition));
+        }
+        if (!initialCards.isEmpty()) {
+            Platform.runLater(() -> view.setHand(initialCards));
         }
     }
 

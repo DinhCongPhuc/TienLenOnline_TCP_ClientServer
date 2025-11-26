@@ -1,14 +1,14 @@
 package client.controller;
 
-import client.network.NetworkClient;
-import client.view.*;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import client.network.NetworkClient;
+import client.view.*;
 
 public class AppController {
     private Stage stage;

@@ -1,9 +1,10 @@
 package client.controller;
 
+import com.google.gson.JsonObject;
+
+import javafx.application.Platform;
 import client.network.NetworkClient;
 import client.view.RoomView;
-import com.google.gson.JsonObject;
-import javafx.application.Platform;
 
 public class RoomController {
     private NetworkClient client;

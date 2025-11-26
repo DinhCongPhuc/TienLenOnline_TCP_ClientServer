@@ -1,12 +1,12 @@
 package server;
 
-import server.network.ClientHandler;
-import server.controller.ServerController;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import server.controller.ServerController;
+import server.network.ClientHandler;
 
 public class MainServer {
     private static final int PORT = 12345;

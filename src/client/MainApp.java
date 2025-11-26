@@ -1,9 +1,8 @@
 package client;
 
-import client.controller.AppController;
-import client.network.NetworkClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import client.controller.AppController;
 import client.network.*;
 
 public class MainApp extends Application {
