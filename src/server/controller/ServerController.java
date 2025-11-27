@@ -95,21 +95,36 @@ public class ServerController {
 
             case "JOIN_ROOM":
                 String rid = payload.get("roomId").getAsString();
+                System.out.println("🚪 Client '" + me.getName() + "' muốn vào phòng: " + rid);
+                
                 Room room = rooms.get(rid);
                 if (room == null) {
-                    send(me.getOut(), "ERROR", gson.toJsonTree(Map.of("message","Room not found")));
+                    System.out.println("❌ Phòng không tồn tại: " + rid);
+                    send(me.getOut(), "ERROR", gson.toJsonTree(Map.of("message","Phòng không tồn tại!")));
                     break;
                 }
+                
+                if (room.getPlayers().size() >= 4) {
+                    System.out.println("❌ Phòng đã đầy: " + rid);
+                    send(me.getOut(), "ERROR", gson.toJsonTree(Map.of("message","Phòng đã đầy!")));
+                    break;
+                }
+                
                 room.addPlayer(me);
+                System.out.println("✅ '" + me.getName() + "' đã vào phòng " + rid + " | Tổng: " + room.getPlayers().size() + "/4");
                 broadcastRoomUpdate(room);
                 break;
             case "READY":
                 Room rr = findPlayerRoom(me);
                 if (rr != null) {
                     me.setReady(true);
+                    System.out.println("✅ " + me.getName() + " READY | Tổng: " + rr.getPlayers().size() + "/4");
+                    
                     broadcastRoomUpdate(rr);
+                    
                     if (rr.allReadyAndFull()) {
-                        rr.startGame();
+                        System.out.println("🚀🚀🚀 4 NGƯỜI READY → BẮT ĐẦU GAME THẬT!");
+                        rr.startGame();  // ← QUAN TRỌNG NHẤT!
                     }
                 }
                 break;

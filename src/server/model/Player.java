@@ -10,7 +10,7 @@ public class Player {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    private List<String> hand = new ArrayList<>();
+    private List<Card> hand = new ArrayList<>();
     private boolean ready = false;
 
     public Player(Socket socket, BufferedReader in, PrintWriter out) {
@@ -25,8 +25,17 @@ public class Player {
     public String getName() { return name; }
     public void setName(String n) { this.name = n; }
     public PrintWriter getOut() { return out; }
-    public List<String> getHand() { return hand; }
+    public List<Card> getHand() { return hand; }
     public boolean isReady() { return ready; }
     public void setReady(boolean ready) { this.ready = ready; }
+
+    // Thêm method này vào class Player
+    public List<String> getHandAsStringList() {
+        List<String> result = new ArrayList<>();
+        for (Card card : hand) {
+            result.add(card.getCode());
+        }
+        return result;
+    }
 }
 

@@ -3,6 +3,7 @@ package client.controller;
 import com.google.gson.JsonObject;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import client.network.NetworkClient;
 import client.view.RoomView;
 
@@ -14,6 +15,7 @@ public class RoomController {
     public RoomController(NetworkClient client, AppController app) {
         this.client = client;
         this.app = app;
+        client.addHandler("ERROR", this::handleError);
 
         client.addHandler("ROOM_UPDATE", this::handleRoomUpdate);
         client.addHandler("ROOM_CREATED", this::handleRoomCreated);
@@ -47,8 +49,48 @@ public class RoomController {
     }
 
     private void handleRoomUpdate(JsonObject msg) {
-        // JsonObject payload = msg.get("payload").getAsJsonObject();
-        // Platform.runLater(() -> view.updatePlayers(payload));
+    JsonObject payload = msg.getAsJsonObject("payload");
+    System.out.println("📊 ROOM_UPDATE: " + payload);
+    
+    Platform.runLater(() -> {
+        // Cập nhật danh sách người chơi trong phòng
+        // view.updatePlayers(payload);  // Nếu có method này
+        
+        // Kiểm tra đủ 4 người → tự động READY
+        int playerCount = payload.get("players").getAsJsonArray().size();
+        if (playerCount >= 1) {  // Test 1 người trước
+            System.out.println("✅ Phòng đủ người → READY!");
+            ready();  // Tự động READY
+        }
+    });
+}
+
+    public void handleMessage(JsonObject msg) {
+        String type = msg.get("type").getAsString();
+        switch (type) {
+            case "ROOM_UPDATE":
+                handleRoomUpdate(msg);
+                break;
+            case "ROOM_CREATED":
+                handleRoomCreated(msg);
+                break;
+            case "ERROR":
+                handleError(msg);
+                break;
+        }
+    }
+
+    private void handleError(JsonObject msg) {
+        String error = msg.getAsJsonObject("payload").get("message").getAsString();
+        System.out.println("❌ LỖI: " + error);
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText("Không thể vào phòng!");
+            alert.setContentText(error);
+            alert.showAndWait();
+        });
     }
 
 

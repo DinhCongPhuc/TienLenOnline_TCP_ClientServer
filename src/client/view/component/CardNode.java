@@ -1,63 +1,53 @@
 package client.view.component;
 
-import javafx.scene.image.Image;
+import client.util.CardImageLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.input.MouseEvent;
-import server.database.CardDao; // nhớ import đúng package CardDao
 
 public class CardNode extends ImageView {
 
     private boolean selected = false;
     private final String code;
 
-    /**
-     * @param code: mã bài (ví dụ "3C")
-     * @param w: chiều rộng hiển thị
-     * @param h: chiều cao hiển thị
-     * @param loader: đối tượng CardDao để load ảnh từ DB
-     */
-    public CardNode(String code, double w, double h, CardDao loader) {
-        this.code = code;
+    public CardNode(String code, double w, double h) {
+        this.code = code.toUpperCase();
 
-        // Load ảnh từ DB
-        Image img = null;
-        try {
-            img = loader.loadCardImage(code);
-            if (img == null) {
-                System.out.println("[CardNode] Không tìm thấy bài: " + code);
-            }
-        } catch (Exception e) {
-            System.err.println("[CardNode] Lỗi khi load bài: " + code);
-            e.printStackTrace();
-        }
+        // Load ảnh từ resources
+        setImage(CardImageLoader.load(code));
 
-        if (img != null) {
-            setImage(img);
-        } else {
-            // Nếu không tìm thấy ảnh, có thể hiển thị placeholder
-            setStyle("-fx-background-color: gray; -fx-border-color: red;");
-        }
-
-        // Cấu hình hiển thị
         setFitWidth(w);
         setFitHeight(h);
         setPreserveRatio(true);
-        setEffect(new DropShadow(6, Color.rgb(0, 0, 0, 0.4)));
+        setSmooth(true);
 
-        // Sự kiện click chọn/bỏ chọn
-        setOnMouseClicked(this::toggle);
+        // Hiệu ứng bóng
+        setEffect(new DropShadow(6, Color.rgb(0, 0, 0, 0.6)));
 
-        // Hover nâng lên
-        setOnMouseEntered(e -> { if (!selected) setTranslateY(-8); });
+        // Hover: nâng lên nhẹ
+        setOnMouseEntered(e -> { if (!selected) setTranslateY(-10); });
         setOnMouseExited(e -> { if (!selected) setTranslateY(0); });
-    }
 
-    private void toggle(MouseEvent e) {
-        selected = !selected;
-        setTranslateY(selected ? -28 : 0);
+        // Click để chọn/bỏ chọn
+        setOnMouseClicked(this::toggle);
     }
+private void toggle(MouseEvent e) {
+    selected = !selected;
+    setTranslateY(selected ? -30 : 0);
+
+    if (selected) {
+        DropShadow glow = new DropShadow();
+        glow.setColor(Color.GOLD);
+        glow.setRadius(15);
+        glow.setSpread(0.35);
+        glow.setOffsetX(0);
+        glow.setOffsetY(0);
+        setEffect(glow);
+    } else {
+        setEffect(new DropShadow(6, Color.rgb(0, 0, 0, 0.6)));
+    }
+}
 
     public boolean isSelected() {
         return selected;
@@ -65,5 +55,14 @@ public class CardNode extends ImageView {
 
     public String getCode() {
         return code;
+    }
+
+    // Dùng khi muốn reset trạng thái chọn (ví dụ sau khi đánh)
+    public void unselect() {
+        if (selected) {
+            selected = false;
+            setTranslateY(0);
+            setEffect(new DropShadow(6, Color.rgb(0, 0, 0, 0.6)));
+        }
     }
 }

@@ -80,6 +80,7 @@ public class RoomView {
         joinCard.getChildren().addAll(
                 joinLabel,
                 joinRoomField,
+                
                 joinBtn
         );
 

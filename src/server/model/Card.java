@@ -22,6 +22,10 @@ public class Card {
         parseCode(code);
     }
 
+    public Card(String code) {
+        this(code, "");  // Gọi constructor cũ, imagePath rỗng
+    }
+
     private void parseCode(String code) {
         // Tách rank
         String r = code.substring(0, code.length() - 1);

@@ -28,7 +28,10 @@ public class Room {
         for (Player p: players) l.add(p.getName());
         return l;
     }
-    public boolean allReadyAndFull() { return players.size()==4 && players.stream().allMatch(Player::isReady); }
+    public boolean allReadyAndFull() {
+         return players.size()==4 && players.stream().allMatch(Player::isReady); 
+        
+    }
     
     public void broadcast(String type, JsonElement payload) {
         JsonObject msg = new JsonObject();
@@ -51,5 +54,6 @@ public class Room {
     public RoomState getState() { return state; }
     public Game getGame() { return game; }
     public List<Player> getPlayers() { return players; }
+    
 }
 

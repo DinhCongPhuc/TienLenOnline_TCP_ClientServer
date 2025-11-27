@@ -1,37 +1,76 @@
 package server.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO {
 
     public boolean registerUser(String username, String password) {
         String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                System.err.println("[DB] Không thể kết nối database!");
+                return false;
+            }
+            
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
-            stmt.setString(2, password); // bạn có thể thêm mã hóa SHA-256 nếu muốn
+            stmt.setString(2, password);
+            
             int rows = stmt.executeUpdate();
+            System.out.println("🔵 [DB] Đăng ký '" + username + "' → INSERT " + rows + " rows");
+            
             return rows > 0;
         } catch (SQLException e) {
-            System.err.println("[DB] Lỗi khi đăng ký user: " + e.getMessage());
+            System.err.println("🔴 [DB] LỖI ĐĂNG KÝ '" + username + "': " + e.getMessage());
             return false;
+        } finally {
+            // ⭐ ĐÓNG CONNECTION ĐÚNG CÁCH
+            closeResources(stmt, conn);
         }
     }
 
     public boolean loginUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                System.err.println("[DB] Không thể kết nối database!");
+                return false;
+            }
+            
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
+            
+            rs = stmt.executeQuery();
+            boolean found = rs.next();
+            
+            System.out.println("🔵 [DB] Login '" + username + "' → TÌM THẤY: " + found);
+            return found;
         } catch (SQLException e) {
-            System.err.println("[DB] Lỗi khi đăng nhập: " + e.getMessage());
+            System.err.println("🔴 [DB] LỖI LOGIN '" + username + "': " + e.getMessage());
             return false;
+        } finally {
+            closeResources(rs, stmt, conn);
         }
+    }
+    
+    // ⭐ METHOD ĐÓNG RESOURCES AN TOÀN
+    private void closeResources(PreparedStatement stmt, Connection conn) {
+        try { if (stmt != null) stmt.close(); } catch (Exception e) {}
+        try { if (conn != null) conn.close(); } catch (Exception e) {}
+    }
+    
+    private void closeResources(ResultSet rs, PreparedStatement stmt, Connection conn) {
+        try { if (rs != null) rs.close(); } catch (Exception e) {}
+        closeResources(stmt, conn);
     }
 }

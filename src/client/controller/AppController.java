@@ -14,7 +14,8 @@ public class AppController {
     private Stage stage;
     private NetworkClient client;
     private Gson gson = new Gson();
-    private AppController app;
+    private RoomController roomController;  // ← THÊM DÒNG NÀY
+    private GameController gameController;
 
     public AppController(Stage stage, NetworkClient client) {
         this.stage = stage;
@@ -34,25 +35,19 @@ public class AppController {
         RoomController rc = new RoomController(client, this);
         RoomView rv = new RoomView(rc, this);
         rc.setView(rv);
+        this.roomController = rc;
         Platform.runLater(() -> stage.setScene(new Scene(rv.getRoot(), 600, 400)));
     }
 
-    public void showGame() {
+  public void showGame() {
     Platform.runLater(() -> {
-        // 1. Tạo Controller với payload mặc định null (hoặc payload thực tế nếu có)
-        GameController gameController = new GameController(client, app, null);
-
-        // 2. Tạo GameView và truyền Controller
+        GameController gameController = new GameController(client, this, null);
         GameView gameView = new GameView(gameController);
-
-        // 3. Gán view vào Controller
         gameController.setView(gameView);
-
-        // 4. Tạo Scene và thêm stylesheet
+        this.gameController = gameController;  // ← THÊM DÒNG NÀY
+        
         Scene scene = new Scene(gameView.getRoot(), 1100, 700);
         scene.getStylesheets().add(getClass().getResource("/main/resources/styles/game.css").toExternalForm());
-
-        // 5. Set Scene cho Stage và hiển thị
         stage.setScene(scene);
         stage.setTitle("Game - Phòng mới");
         stage.show();
@@ -99,6 +94,23 @@ public class AppController {
                     showAlert("Sai tài khoản hoặc mật khẩu!")
                 );
                 break;
+                case "ROOM_CREATED":
+                case "ROOM_UPDATE":
+                case "ERROR":
+                    if (roomController != null) {
+                        roomController.handleMessage(msg);  // ← CHUYỂN CHO RoomController
+                    }
+                    break;
+
+                case "GAME_START":
+                case "GAME_STATE":
+                case "PLAY_RESULT":
+                case "GAME_END":
+                case "NEW_ROUND":
+                    if (gameController != null) {
+                        gameController.handleMessage(msg);  // ← CHUYỂN CHO GameController
+                    }
+                    break;
 
             default:
                 Platform.runLater(() ->
